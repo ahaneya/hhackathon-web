@@ -10,9 +10,9 @@ import bootstrapJS from '../node_modules/bootstrap/dist/js/bootstrap.min'
 
 const routes = [
   { path: '/', component: Landing },
-  { path: '/self', component: Self },
-  { path: '/serve', component: Serve },
-  { path: '/looking', component: Looking }
+  { path: '/self', name: 'self', component: Self },
+  { path: '/serve',  name: 'serve' , component: Serve },
+  { path: '/looking',  name: 'looking' , component: Looking }
 ]
 
 const router = new VueRouter({
