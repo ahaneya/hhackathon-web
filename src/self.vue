@@ -3,42 +3,25 @@
     export default {
         name: 'self',
         data() {
-            return {
-                email: '',
-                password: '',
-                user: undefined,
-            }
+            return {input:{text:''}}
         },
         created() {
 
 
         },
 
+        
+
         methods: {
-            // login() {
-            //     const {
-            //         email,
-            //         password
-            //     } = this
-            //     if (email === 'user@hack.code', password === '123') {
-            //         const user = {
-            //             id: '121qwsaxsx',
-            //             username: 'just-user',
-            //             email: 'user@hack.code'
-            //         }
-            //         this.$router.push({
-            //             name: 'main',
-            //             params: {
-            //                 user
-            //             }
-            //         })
-            //     }
-
-
-            // },
-            pushTo1() {
+            pushToHome() {
                 this.$router.push({
-                    name: 'self'
+                    name: 'landing'
+                })
+            },
+
+            pushToConfirm() {
+                this.$router.push({
+                    name: 'confirm'
                 })
             },
             pushTo2() {
@@ -50,7 +33,13 @@
                 this.$router.push({
                     name: 'looking'
                 })
-            }
+            },
+
+            reset() {
+                this.input.text="";
+                //console.log(this.input)
+            },
+
         }
     }
 </script>
@@ -73,7 +62,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Hajj ID</span>
                         </div>
-                        <input type="text" class="form-control" placeholder="Hajj ID" aria-label="Hajj IDe" aria-describedby="button-addon2">
+                        <input v-model="input.text" type="text" class="form-control" placeholder="Hajj ID" aria-label="Hajj IDe" aria-describedby="button-addon2">
                         <div class="input-group-append">
                             <button class="btn btn-dark margin-top-remove" type="button" id="button-addon2">Search</button>
                         </div>
@@ -87,8 +76,8 @@
                 <div class="col">
                 </div>
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
-                    <p class="font-weight-bold" v-if="disabled"> Hajj Name: Ahmed Ahmed Ahmed </p>
-                    <p class="font-weight-bold" v-if="disabled"> Group Name: World Group </p>
+                    <p class="font-weight-bold" v-if="false"> Hajj Name: Ahmed Ahmed Ahmed </p>
+                    <p class="font-weight-bold" v-if="false"> Group Name: World Group </p>
                 </div>
                 <div class="col">
                 </div>
@@ -97,8 +86,8 @@
                 <div class="col">
                 </div>
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
-                    <button type="button" class="btn btn-dark btn-md btn-block" v-on:click='pushTo3()'>Confirm & Submit</button>
-                    <button type="button" class="btn btn-dark btn-md btn-block" v-on:click='pushTo3()'>Reset</button>
+                    <button type="button" class="btn btn-dark btn-md btn-block" v-on:click='pushToConfirm()'>Confirm & Submit</button>
+                    <button type="button" class="btn btn-dark btn-md btn-block" v-on:click="reset()">Reset</button>
 
                 </div>
                 <div class="col">
