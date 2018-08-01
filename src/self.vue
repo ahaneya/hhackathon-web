@@ -1,7 +1,7 @@
 <script>
     // 
     export default {
-        name: 'landing',
+        name: 'self',
         data() {
             return {
                 email: '',
@@ -39,17 +39,17 @@
             pushTo1() {
                 this.$router.push({
                     name: 'self'
-                    })
+                })
             },
             pushTo2() {
                 this.$router.push({
                     name: 'serve'
-                    })
+                })
             },
             pushTo3() {
                 this.$router.push({
                     name: 'looking'
-                    })
+                })
             }
         }
     }
@@ -69,10 +69,13 @@
                 <div class="col">
                 </div>
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
-                    <button
-                     type="button" 
-                     class="btn btn-dark btn-lg btn-block"
-                     v-on:click='pushTo1()'>I'm Lost!</button>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Hajj ID</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Hajj ID" aria-label="Hajj ID" aria-describedby="basic-addon1">
+                    </div>
+
                 </div>
                 <div class="col">
                 </div>
@@ -81,10 +84,7 @@
                 <div class="col">
                 </div>
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
-                    <button 
-                    type="button" 
-                    class="btn btn-dark btn-lg btn-block"
-                    v-on:click='pushTo2()'>I have a Drifter</button>
+                    <button type="button" class="btn btn-dark btn-lg btn-block" v-on:click='pushTo2()'>I have a Drifter</button>
                 </div>
                 <div class="col">
                 </div>
@@ -93,10 +93,7 @@
                 <div class="col">
                 </div>
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
-                    <button 
-                    type="button" 
-                    class="btn btn-dark btn-lg btn-block"
-                    v-on:click='pushTo3()'>Looking for a Drifter</button>
+                    <button type="button" class="btn btn-dark btn-lg btn-block" v-on:click='pushTo3()'>Looking for a Drifter</button>
                 </div>
                 <div class="col">
                 </div>
