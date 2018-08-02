@@ -113,7 +113,7 @@ alert("Browser doesn't support Geolocation");
             this.haj_info = response.data
             this.showInfo=false
             console.log(response.data)
-            console.log(response.data[0].haj_first_name);
+    
             // console.log(response.data[0].superuser_id[0]);
         });
     }
