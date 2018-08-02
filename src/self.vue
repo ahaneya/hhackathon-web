@@ -11,15 +11,16 @@ export default {
   data() {
     return {
       showInfo: true,
+      showInfoifNoData: true,
       loading: false,
       status: "",
       input: { text: "" },
       haj_info: [
         {
-          // haj_id: "",
-          // haj_first_name: "",
-          // haj_last_name: "",
-          // lost: null
+          haj_id: "",
+          haj_first_name: "",
+          haj_last_name: "",
+          lost: null
         }
       ]
     };
@@ -104,8 +105,15 @@ export default {
         this.axios
           .get("http://localhost:3000/queryById/haj_id=" + this.input.text)
           .then(response => {
-            this.haj_info = response.data;
-            this.showInfo = false;
+            console.log(response)
+            //this.haj_info = response.data;
+            if(response.data.length > 0) {
+              this.haj_info = response.data;
+              this.showInfo = false;
+            } else {
+              this.showInfoifNoData = false;
+            }
+            
             // console.log(response.data);
 
             // console.log(response.data[0].superuser_id[0]);
@@ -157,7 +165,7 @@ export default {
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
                   
                         <p class="font-weight-bold" style="color:red;" id="txtValidationMsg"></p>
-            
+                    <p class="font-weight-bold" v-show="!showInfoifNoData" > ID Not Found </p>
                     <p class="font-weight-bold" v-show="!showInfo" > Hajj Name: {{ haj_info[0].haj_first_name }} {{ haj_info[0].haj_last_name}} </p>
                     <p class="font-weight-bold" v-show="!showInfo"> Group Name: {{ haj_info[0].Superuser_id}} </p>
                 </div>
