@@ -4,6 +4,7 @@ import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
+
 Vue.use(VueAxios, axios);
 
 
@@ -11,10 +12,15 @@ export default {
   name: "self",
   data() {
     return {
+    showInfo:true,
+    loading: false,
+      status: '',
       input: { text: "" },
       haj_info: [{}]
     };
   },
+ 
+
   created() {},
 
   mounted() {},
@@ -28,11 +34,46 @@ export default {
 
     pushToConfirm() {
 
-        
-        this.$router.push({
+       this.loading = true;
+// Check if the browser has support for the Geolocation API
+if (!navigator.geolocation) {
+
+alert("Browser doesn't support Geolocation");
+
+} else {
+
+
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+      // Get the coordinates of the current location.
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude;
+
+  alert("Data loaded successfully")
+ 
+
+
+   axios.put('http://localhost:3000/confirm/submission', {
+       haj_id: "123",
+       lost: false,
+        lat: lat.toFixed(3),
+        lng: lng.toFixed(3)
+ }).then(function(response){
+
+
+
+  });
+   
+   });// position
+   
+    }//else
+ 
+   
+   this.$router.push({
         name: "confirm"
-        });
-        
+      }); 
+
     },
     pushTo2() {
       this.$router.push({
@@ -51,12 +92,32 @@ export default {
     },
 
     submitSearch() {
-            this.axios.get("http://localhost:3000/queryById/haj_id=123456789").then(response => {
+
+       var  textMsg;
+
+
+
+    // If x is Not a Number or less than one or greater than 10
+    if (isNaN(this.input.text) ) {
+      textMsg = "Hajj ID should be a number and less than 15 digits" ;
+        }
+        else if( this.input.text < 1 || this.input.text > 1000000000000000){
+        
+          textMsg = "Please enter Hajj ID";
+    } else {
+       
+    
+   
+         textMsg = "";
+            this.axios.get("http://localhost:3000/queryById/haj_id="+this.input.text).then(response => {
             this.haj_info = response.data
+            this.showInfo=false
             console.log(response.data)
             console.log(response.data[0].haj_first_name);
             // console.log(response.data[0].superuser_id[0]);
         });
+    }
+     document.getElementById("txtValidationMsg").innerHTML = textMsg;
     }
   }
 };
@@ -80,10 +141,13 @@ export default {
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Hajj ID</span>
                         </div>
-                        <input v-model="input.text" type="text" class="form-control" placeholder="Hajj ID" aria-label="Hajj IDe" aria-describedby="button-addon2">
+                        <input v-model="input.text" type="text" maxlength="15" class="form-control" placeholder="Hajj ID" aria-label="Hajj IDe" aria-describedby="button-addon2">
+              
                         <div class="input-group-append">
                             <button class="btn btn-dark margin-top-remove" type="button" id="button-addon2" v-on:click="submitSearch()">Search</button>
                         </div>
+                   
+
                     </div>
 
                 </div>
@@ -94,8 +158,11 @@ export default {
                 <div class="col">
                 </div>
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
-                    <p class="font-weight-bold" v-if="haj_info" > Hajj Name: {{ haj_info[0].haj_first_name }} {{ haj_info[0].haj_last_name}} </p>
-                    <p class="font-weight-bold" v-if="haj_info"> Group Name: {{ haj_info[0].Superuser_id}} </p>
+                  
+                        <p class="font-weight-bold" style="color:red;" id="txtValidationMsg"></p>
+            
+                    <p class="font-weight-bold" v-show="!showInfo" > Hajj Name: {{ haj_info[0].haj_first_name }} {{ haj_info[0].haj_last_name}} </p>
+                    <p class="font-weight-bold" v-show="!showInfo"> Group Name: {{ haj_info[0].Superuser_id}} </p>
                 </div>
                 <div class="col">
                 </div>
@@ -104,9 +171,12 @@ export default {
                 <div class="col">
                 </div>
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
-                    <button type="button" class="btn btn-dark btn-md btn-block" v-on:click='pushToConfirm()'>Confirm & Submit</button>
+                    <button type="button" class="btn btn-dark btn-md btn-block" v-on:click=pushToConfirm()>Confirm & Submit</button>
                     <button type="button" class="btn btn-dark btn-md btn-block" v-on:click="reset()">Reset</button>
-
+<div v-if="loading" v-cloak>
+    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+    <span>Loading...</span>
+  </div>
                 </div>
                 <div class="col">
                 </div>
