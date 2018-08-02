@@ -84,7 +84,7 @@
                     <button 
                     type="button" 
                     class="btn btn-dark btn-lg btn-block"
-                    v-on:click='pushTo2()'>I have a Drifter</button>
+                    v-on:click='pushTo1()'>I have a Drifter</button>
                 </div>
                 <div class="col">
                 </div>

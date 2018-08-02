@@ -42,7 +42,7 @@
             <div class="col">
             </div>
             <div class="col-6 col-8-md col-12-lg">
-                <button type="button" class="btn btn-dark btn-md btn-block" v-on:click="backToHome()">Back to Home</button>
+                <button type="button" class="btn btn-dark btn-lg btn-block" v-on:click="backToHome()">Back to Home</button>
             </div>
             <div class="col">
             </div>

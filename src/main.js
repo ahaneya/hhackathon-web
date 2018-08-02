@@ -14,7 +14,8 @@ const routes = [
   { path: '/self', name: 'self', component: Self },
   { path: '/serve',  name: 'serve' , component: Serve },
   { path: '/looking',  name: 'looking' , component: Looking },
-  { path: '/confirm',  name: 'confirm' , component: Confirm }
+  { path: '/confirm',  name: 'confirm' , component: Confirm },
+  { path: '*', redirect: '/' }
 ]
 
 const router = new VueRouter({
