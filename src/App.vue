@@ -25,6 +25,9 @@
 export default {
   name: 'app',
   components: {
+  },
+  mounted() {
+    this.$router.push({name: "landing"})
   }
 }
 </script>

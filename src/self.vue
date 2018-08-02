@@ -4,22 +4,26 @@ import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
-
 Vue.use(VueAxios, axios);
-
 
 export default {
   name: "self",
   data() {
     return {
-    showInfo:true,
-    loading: false,
-      status: '',
+      showInfo: true,
+      loading: false,
+      status: "",
       input: { text: "" },
-      haj_info: [{}]
+      haj_info: [
+        {
+          // haj_id: "",
+          // haj_first_name: "",
+          // haj_last_name: "",
+          // lost: null
+        }
+      ]
     };
   },
- 
 
   created() {},
 
@@ -33,46 +37,42 @@ export default {
     },
 
     pushToConfirm() {
+      const haj_id = this.input.text;
+      const self = this;
+      console.log(haj_id)
+      // Check if the browser has support for the Geolocation API
+      if (!navigator.geolocation) {
+        alert("Browser doesn't support Geolocation");
+      } else {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          // Get the coordinates of the current location.
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
 
-       this.loading = true;
-// Check if the browser has support for the Geolocation API
-if (!navigator.geolocation) {
+         // alert("Data loaded successfully");
 
-alert("Browser doesn't support Geolocation");
-
-} else {
-
-
-
-    navigator.geolocation.getCurrentPosition(function(position) {
-
-      // Get the coordinates of the current location.
-      var lat = position.coords.latitude;
-      var lng = position.coords.longitude;
-
-  alert("Data loaded successfully")
- 
-
-
-   axios.put('http://localhost:3000/confirm/submission', {
-       haj_id: "123",
-       lost: false,
-        lat: lat.toFixed(3),
-        lng: lng.toFixed(3)
- }).then(function(response){
-
-
-
-  });
-   
-   });// position
-   
-    }//else
- 
-   
-   this.$router.push({
+          axios
+            .put(
+              "http://localhost:3000/confirm/submission/",
+              {
+                haj_id,
+                lost: true,
+                lat: lat.toFixed(3),
+                lng: lng.toFixed(3)
+              }
+            )
+            .then(function(response) {
+              console.log(response);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+              self.$router.push({
         name: "confirm"
-      }); 
+      });
+        }); // position
+      } //else
+
 
     },
     pushTo2() {
@@ -92,32 +92,29 @@ alert("Browser doesn't support Geolocation");
     },
 
     submitSearch() {
+      var textMsg;
 
-       var  textMsg;
+      // If x is Not a Number or less than one or greater than 10
+      if (isNaN(this.input.text)) {
+        textMsg = "Hajj ID should be a number and less than 15 digits";
+      } else if (this.input.text < 1 || this.input.text > 1000000000000000) {
+        textMsg = "Please enter Hajj ID";
+      } else {
+        textMsg = "";
+        this.axios
+          .get("http://localhost:3000/queryById/haj_id=" + this.input.text)
+          .then(response => {
+            this.haj_info = response.data;
+            this.showInfo = false;
+            // console.log(response.data);
 
-
-
-    // If x is Not a Number or less than one or greater than 10
-    if (isNaN(this.input.text) ) {
-      textMsg = "Hajj ID should be a number and less than 15 digits" ;
-        }
-        else if( this.input.text < 1 || this.input.text > 1000000000000000){
-        
-          textMsg = "Please enter Hajj ID";
-    } else {
-       
-    
-   
-         textMsg = "";
-            this.axios.get("http://localhost:3000/queryById/haj_id="+this.input.text).then(response => {
-            this.haj_info = response.data
-            this.showInfo=false
-            console.log(response.data)
-    
             // console.log(response.data[0].superuser_id[0]);
-        });
-    }
-     document.getElementById("txtValidationMsg").innerHTML = textMsg;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      document.getElementById("txtValidationMsg").innerHTML = textMsg;
     }
   }
 };
@@ -141,7 +138,7 @@ alert("Browser doesn't support Geolocation");
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Hajj ID</span>
                         </div>
-                        <input v-model="input.text" type="text" maxlength="15" class="form-control" placeholder="Hajj ID" aria-label="Hajj IDe" aria-describedby="button-addon2">
+                        <input v-model="input.text" type="text" maxlength="15" class="form-control" placeholder="Hajj ID" aria-label="Hajj ID" aria-describedby="button-addon2">
               
                         <div class="input-group-append">
                             <button class="btn btn-dark margin-top-remove" type="button" id="button-addon2" v-on:click="submitSearch()">Search</button>
