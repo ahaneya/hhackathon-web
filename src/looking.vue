@@ -1,32 +1,28 @@
 
 <script>
-
-
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
-import {load, Map, Marker} from 'vue-google-maps'
-load('AIzaSyDB6zzW8EnKL52b7lojNfQlRnxQ1Zl6K0w')
+import { load, Map, Marker } from "vue-google-maps";
+load("AIzaSyDB6zzW8EnKL52b7lojNfQlRnxQ1Zl6K0w");
 
 Vue.use(VueAxios, axios);
 
 //
 
 export default {
-    
   name: "self",
   data() {
     return {
-
-    showInfo:true,
-    loading: false,
-      status: '',
+      showInfoifNoData: true,
+      showInfo: true,
+      loading: false,
+      status: "",
       input: { text: "" },
       haj_info: [{}]
     };
   },
- 
-  
+
   created() {},
 
   mounted() {},
@@ -38,38 +34,48 @@ export default {
       });
     },
 
-CreateMap: function() {
+    CreateMap: function() {
+      const self = this;
+      var textMsg;
 
-const self=this;
-    this.axios.get("http://localhost:3000/queryById/haj_id="+this.input.text).then(response => {
-            this.haj_info = response.data
-            this.showInfo=false
-            console.log(response.data)
-         var lat_in=   self.haj_info[0].lat;
-         var lng_in=self.haj_info[0].lng;
-        
-          var mapCanvas = document.getElementById("map");
-          var myLatLng ={lat: lat_in , lng:lng_in};
-    var mapOptions = {
-        center: new google.maps.LatLng(lat_in, lng_in),
-        zoom: 10
-    };
-    var map = new google.maps.Map(mapCanvas, mapOptions);
+      // If x is Not a Number or less than one or greater than 10
+      if (isNaN(this.input.text)) {
+        textMsg = "Hajj ID should be a number and less than 15 digits";
+      } else if (this.input.text < 1 || this.input.text > 1000000000000000) {
+        textMsg = "Please enter Hajj ID";
+      } else {
+        textMsg = "";
+        this.axios
+          .get("http://localhost:3000/queryById/haj_id=" + this.input.text)
+          .then(response => {
+            if (response.data.length > 0) {
+              this.haj_info = response.data;
+              this.showInfo = false;
+            } else {
+              this.showInfoifNoData = false;
+            }
+            // console.log(response.data)
+            var lat_in = self.haj_info[0].lat;
+            var lng_in = self.haj_info[0].lng;
 
- var marker = new google.maps.Marker({position: new google.maps.LatLng(lat_in, lng_in), map: map});
-    
-    
-   });
+            var mapCanvas = document.getElementById("map");
+            var myLatLng = { lat: lat_in, lng: lng_in };
+            var mapOptions = {
+              center: new google.maps.LatLng(lat_in, lng_in),
+              zoom: 10
+            };
+            var map = new google.maps.Map(mapCanvas, mapOptions);
 
-  
-},
-    
-   
-   
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(lat_in, lng_in),
+              map: map
+            });
+          });
+      }
+      document.getElementById("txtValidationMsg").innerHTML = textMsg;
+    }
   }
 };
-
-
 </script>
 
 
@@ -114,6 +120,7 @@ const self=this;
                 <div class="col-lg-6 col-md-8 col-sm-12 col-xm-12">
                   
                         <p class="font-weight-bold" style="color:red;" id="txtValidationMsg"></p>
+                        <p class="font-weight-bold" v-show="!showInfoifNoData" > ID Not Found </p>
             
                     <p class="font-weight-bold" v-show="!showInfo" > Hajj Name: {{ haj_info[0].haj_first_name }} {{ haj_info[0].haj_last_name}} </p>
                     <p class="font-weight-bold" v-show="!showInfo"> Group Name: {{ haj_info[0].Superuser_id}} </p>
@@ -141,7 +148,7 @@ const self=this;
 <style>
 /* Set the size of the div element that contains the map */
 #map {
-  height: 400px;  /* The height is 400 pixels */
-  width: 100%;  /* The width is the width of the web page */
- }
+  height: 400px; /* The height is 400 pixels */
+  width: 100%; /* The width is the width of the web page */
+}
 </style>
