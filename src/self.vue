@@ -167,7 +167,7 @@ export default {
                         <p class="font-weight-bold" style="color:red;" id="txtValidationMsg"></p>
                     <p class="font-weight-bold" v-show="!showInfoifNoData" > ID Not Found </p>
                     <p class="font-weight-bold" v-show="!showInfo" > Hajj Name: {{ haj_info[0].haj_first_name }} {{ haj_info[0].haj_last_name}} </p>
-                    <p class="font-weight-bold" v-show="!showInfo"> Group Name: {{ haj_info[0].Superuser_id}} </p>
+                    <p class="font-weight-bold" v-show="!showInfo"> Group Name: Hmlah Name </p>
                 </div>
                 <div class="col">
                 </div>
